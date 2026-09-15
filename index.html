@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار المحاليل الشامل (40 سؤال)</title>
+    <title>اختبار المحاليل الشامل</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,128 +26,8 @@
             background-color: #2c3e50;
         }
 
-        #quiz-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        /* تنسيق شريط التقدم */
-        #progress-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background-color: rgba(255, 255, 255, 0.2);
-            z-index: 100;
-            display: none;
-        }
-
-        #progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: #2ecc71;
-            transition: width 0.4s ease;
-            box-shadow: 0 0 10px #2ecc71;
-        }
-
-        .progress-text-badge {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: white;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 20px;
-            border-radius: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            z-index: 100;
-            display: none;
-        }
-
-        /* تنسيق شاشة البداية */
-        #welcome-screen {
-            background: linear-gradient(135deg, #1D2B64 0%, #F8CDDA 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-        }
-
-        .welcome-box {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 3rem;
-            border-radius: 20px;
-            text-align: center;
-            border: 2px solid rgba(255,255,255,0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            width: 90%;
-            max-width: 500px;
-        }
-
-        .welcome-box h1 {
-            color: #fff;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-            text-align: right;
-        }
-
-        .input-group label {
-            display: block;
-            color: #fff;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            border: none;
-            outline: none;
-            font-family: 'Cairo', sans-serif;
-        }
-
-        .start-btn {
-            background-color: #f1c40f;
-            color: #333;
-            border: none;
-            padding: 1rem 3rem;
-            font-size: 1.5rem;
-            font-weight: 900;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 1rem;
-            width: 100%;
-        }
-
-        .start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-        }
-
-        #quiz-slides {
-            width: 100%;
-            height: 100%;
-        }
-
-        .slide {
+        /* --- شاشات العرض --- */
+        .screen {
             position: absolute;
             top: 0;
             left: 0;
@@ -159,17 +39,112 @@
             align-items: center;
             padding: 2rem;
             text-align: center;
-            animation: fadeIn 0.6s ease-in-out;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        .slide.active {
+        .screen.active {
             display: flex;
         }
 
+        /* --- شاشة الدخول --- */
+        #login-screen {
+            background: linear-gradient(135deg, #1D2B64 0%, #F8CDDA 100%);
+        }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .login-box h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-input, .login-select {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            font-weight: 700;
+        }
+
+        .login-input:focus, .login-select:focus {
+            border-color: #3498db;
+        }
+
+        .start-btn {
+            padding: 1rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            background: #27ae60;
+            transform: scale(1.05);
+        }
+
+        /* --- شريط التقدم --- */
+        #progress-wrapper {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: rgba(0,0,0,0.6);
+            padding: 15px 25px;
+            border-radius: 30px;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #progress-text {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        #progress-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        #progress-bar-fill {
+            height: 100%;
+            background: #2ecc71;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* --- شاشة الاختبار --- */
         .icon {
             font-size: 5rem;
             margin-bottom: 1rem;
             filter: drop-shadow(0px 8px 10px rgba(0,0,0,0.3));
+            margin-top: 60px; /* لترك مساحة لشريط التقدم */
         }
 
         .question-text {
@@ -214,20 +189,11 @@
             opacity: 0.9;
         }
 
-        .option-btn.correct {
-            background-color: var(--correct-color);
-            color: white;
-            border-color: #27ae60;
-        }
-
-        .option-btn.wrong {
-            background-color: var(--wrong-color);
-            color: white;
-            border-color: #c0392b;
-        }
+        .option-btn.correct { background-color: var(--correct-color); color: white; border-color: #27ae60; }
+        .option-btn.wrong { background-color: var(--wrong-color); color: white; border-color: #c0392b; }
 
         .feedback-container {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             min-height: 90px;
             display: flex;
             flex-direction: column;
@@ -242,7 +208,6 @@
             padding: 1rem 2rem;
             border-radius: 15px;
             display: none;
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-width: 800px;
         }
 
@@ -261,364 +226,340 @@
             transition: all 0.2s;
         }
 
-        .next-btn:hover {
-            transform: scale(1.1);
-        }
+        .next-btn:hover { transform: scale(1.1); background-color: #f39c12; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes popIn {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        #result-slide {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        /* --- شاشة النتيجة --- */
+        #result-screen {
+            background: linear-gradient(135deg, #1D2B64 0%, #F8CDDA 100%);
         }
         
-        .loading-text {
-            color: #3498db;
-            font-size: 1.5rem;
+        .action-btn {
             margin-top: 1rem;
-            display: none;
-        }
-
-        .action-btns {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .retry-btn {
-            background-color: #e67e22;
-            color: white;
-            border: none;
             padding: 1rem 2rem;
             font-size: 1.5rem;
             font-weight: 900;
+            border: none;
             border-radius: 20px;
             cursor: pointer;
-            transition: transform 0.2s;
+            width: 350px;
+            max-width: 90%;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
+        .retry-btn { background-color: #fff; color: #333; }
         .retry-btn:hover { transform: scale(1.05); }
 
-        .restart-btn {
-            background-color: #fff;
-            color: #333;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.5rem;
-            font-weight: 900;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: transform 0.2s;
+        .review-btn { background-color: #e67e22; color: #fff; display: none; }
+        .review-btn:hover { background-color: #d35400; transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- التوافق مع الهواتف المحمولة --- */
+        @media (max-width: 768px) {
+            .options-grid {
+                grid-template-columns: 1fr; 
+                width: 95%;
+                gap: 10px;
+            }
+            .question-text {
+                font-size: 1.6rem; 
+                margin-bottom: 1rem;
+                margin-top: 1rem;
+            }
+            .option-btn {
+                font-size: 1.2rem; 
+                padding: 1rem;
+            }
+            .icon {
+                font-size: 3rem;
+                margin-bottom: 0.5rem;
+                margin-top: 80px;
+            }
+            .feedback-text {
+                font-size: 1.2rem;
+                padding: 0.8rem;
+            }
+            .next-btn {
+                font-size: 1.3rem;
+                padding: 0.8rem 2rem;
+            }
+            .login-box h2 {
+                font-size: 1.5rem;
+            }
+            #progress-text {
+                font-size: 1rem;
+            }
         }
-        
-        .restart-btn:hover { transform: scale(1.05); }
     </style>
 </head>
 <body>
 
-    <div id="quiz-container">
-        <!-- شريط التقدم -->
-        <div id="progress-wrapper">
-            <div id="progress-bar"></div>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen" class="screen active">
+        <div class="login-box">
+            <h2>🧪 أهلاً بك في اختبار المحاليل</h2>
+            <input type="text" id="studentName" class="login-input" placeholder="اكتب اسمك الثلاثي" required>
+            <select id="studentClass" class="login-select" required>
+                <option value="" disabled selected>اختر صفك</option>
+                <option value="ثاني إعدادي 1">ثاني إعدادي 1</option>
+                <option value="ثاني إعدادي 2">ثاني إعدادي 2</option>
+                <option value="ثاني إعدادي 3">ثاني إعدادي 3</option>
+                <option value="ثاني إعدادي 4">ثاني إعدادي 4</option>
+            </select>
+            <button onclick="startQuiz()" class="start-btn">ابدأ الاختبار 🚀</button>
         </div>
-        <div id="progress-text" class="progress-text-badge"></div>
+    </div>
 
-        <!-- شاشة تسجيل الدخول -->
-        <div id="welcome-screen">
-            <div class="welcome-box">
-                <div class="icon">🎓</div>
-                <h1>اختبار المحاليل</h1>
-                <div class="input-group">
-                    <label for="student-name">الاسم الرباعي:</label>
-                    <input type="text" id="student-name" placeholder="اكتب اسمك هنا..." required>
-                </div>
-                <div class="input-group">
-                    <label for="student-class">الصف:</label>
-                    <select id="student-class">
-                        <option value="" disabled selected>اختر صفك...</option>
-                        <option value="ثاني إعدادي أول">ثاني إعدادي أول</option>
-                        <option value="ثاني إعدادي ثاني">ثاني إعدادي ثاني</option>
-                        <option value="ثاني إعدادي ثالث">ثاني إعدادي ثالث</option>
-                        <option value="ثاني إعدادي رابع">ثاني إعدادي رابع</option>
-                    </select>
-                </div>
-                <button class="start-btn" onclick="startQuiz()">ابدأ الاختبار 🚀</button>
+    <!-- شاشة الاختبار -->
+    <div id="quiz-screen" class="screen">
+        <div id="progress-wrapper">
+            <div id="progress-text">السؤال 1 من 40</div>
+            <div id="progress-bar-bg">
+                <div id="progress-bar-fill"></div>
             </div>
         </div>
+        
+        <div id="q-icon" class="icon"></div>
+        <h2 id="q-text" class="question-text"></h2>
+        <div id="q-options" class="options-grid"></div>
+        
+        <div class="feedback-container">
+            <div id="q-feedback" class="feedback-text"></div>
+            <button id="next-btn" class="next-btn" onclick="handleNextAction()">السؤال التالي ➔</button>
+        </div>
+    </div>
 
-        <!-- حاوية الشرائح -->
-        <div id="quiz-slides"></div>
+    <!-- شاشة النتيجة -->
+    <div id="result-screen" class="screen">
+        <div class="icon" style="margin-top: 0;">🏆</div>
+        <h2 class="question-text" id="result-msg">انتهى الاختبار بنجاح!</h2>
+        <h2 class="question-text" id="final-score" style="font-size: 4rem; color: #f1c40f; margin-bottom: 3rem;"></h2>
+        
+        <div id="loading-msg" style="color: white; font-size: 1.2rem; margin-bottom: 1rem;">جاري تسجيل النتيجة للأستاذ... ⏳</div>
+
+        <button id="review-btn" class="action-btn review-btn" onclick="startReviewMode()">مراجعة أخطائي 📝</button>
+        <button class="action-btn retry-btn" onclick="location.reload()">إعادة الاختبار من البداية 🔄</button>
     </div>
 
     <script>
-        // رابط جوجل سكربت المعتمد
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdkZs9U0-TK2E7mR90xPqfQQvBMWl_mqjECyDGE8-IvN-8_bkKKyyFdcIx8g2Gv7EM/exec'; 
+        // رابط سكربت جوجل لإرسال النتائج
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdkZs9U0-TK2E7mR90xPqfQQvBMWl_mqjECyDGE8-IvN-8_bkKKyyFdcIx8g2Gv7EM/exec";
 
-        // 40 سؤال
+        const gradients = [
+            "linear-gradient(135deg, #1cb5e0 0%, #000046 100%)", "linear-gradient(135deg, #FF8008 0%, #FFA03A 100%)",
+            "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)", "linear-gradient(135deg, #FC466B 0%, #3F5EFB 100%)",
+            "linear-gradient(135deg, #4b6cb7 0%, #182848 100%)", "linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%)",
+            "linear-gradient(135deg, #00b09b 0%, #96c93d 100%)", "linear-gradient(135deg, #f12711 0%, #f5af19 100%)",
+            "linear-gradient(135deg, #654ea3 0%, #eaafc8 100%)", "linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%)",
+            "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)", "linear-gradient(135deg, #ff9966 0%, #ff5e62 100%)",
+            "linear-gradient(135deg, #0cebeb 0%, #20e3b2 50%, #29ffc6 100%)", "linear-gradient(135deg, #114357 0%, #F29492 100%)",
+            "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)", "linear-gradient(135deg, #b92b27 0%, #1565C0 100%)",
+            "linear-gradient(135deg, #373B44 0%, #4286f4 100%)", "linear-gradient(135deg, #D38312 0%, #A83279 100%)"
+        ];
+
         const quizData = [
             { question: "مما يتكون المحلول بشكل أساسي؟", options: ["مذاب ومذيب", "مذاب فقط", "مذيب فقط", "غاز وسائل"], answer: 0, feedback: "يتكون المحلول دائماً من مكونين رئيسيين: مذاب ومذيب.", icon: "🧪" },
             { question: "أي من المكونات التالية يوجد بكثرة في المحلول؟", options: ["المذاب", "المذيب", "الغاز", "الراسب"], answer: 1, feedback: "المذيب هو المادة التي توجد بكثرة (بكمية أكبر) في المحلول.", icon: "💧" },
             { question: "أي المكونات يوجد بقلة في المحلول؟", options: ["المذيب", "الماء", "المذاب", "الهواء"], answer: 2, feedback: "المذاب هو المادة التي توجد بقلة (بكمية أقل) في المحلول.", icon: "🤏" },
-            { question: "على أي أساس يتم تحديد نوع المحلول؟", options: ["حسب كمية المذاب", "حسب حالة المذيب", "حسب درجة الحرارة", "حسب لون المحلول"], answer: 1, feedback: "القاعدة تنص على أنه: يُحدد نوع المحلول على حسب حالة المذيب.", icon: "⚖️" },
+            { question: "على أي أساس يتم تحديد نوع المحلول؟", options: ["حسب كمية المذاب", "حسب حالة المذيب", "حسب درجة الحرارة", "حسب لون المحلول"], answer: 1, feedback: "يُحدد نوع المحلول على حسب حالة المذيب.", icon: "⚖️" },
             { question: "إذا كان المذيب غازاً، فما هو نوع المحلول؟", options: ["محلول صلب", "محلول سائل", "محلول غازي", "سبيكة"], answer: 2, feedback: "بما أن المذيب غاز، فإن المحلول يُسمى محلولاً غازياً.", icon: "☁️" },
             { question: "الهواء الجوي يعتبر مثالاً على أي نوع من المحاليل؟", options: ["محاليل سائلة", "محاليل غازية", "محاليل صلبة", "مادة نقية"], answer: 1, feedback: "الهواء الجوي هو محلول غازي يتكون من غازات مذابة في غاز.", icon: "🌍" },
             { question: "في الهواء الجوي، ما هو المذيب (المادة الأكثر)؟", options: ["غاز الأكسجين", "غاز النيتروجين", "ثاني أكسيد الكربون", "بخار الماء"], answer: 1, feedback: "غاز النيتروجين هو المذيب لأنه يوجد بكثرة بنسبة 78%.", icon: "💨" },
             { question: "كم تبلغ نسبة غاز الأكسجين (المذاب) في الهواء الجوي؟", options: ["78%", "96%", "5%", "21%"], answer: 3, feedback: "نسبة غاز الأكسجين في الهواء الجوي هي 21% ويعتبر مذاباً.", icon: "🌬️" },
-            { question: "يعتبر السكر المذاب في الماء مثالاً على محلول:", options: ["صلب × سائل", "سائل × سائل", "غاز × سائل", "صلب × صلب"], answer: 0, feedback: "السكر (صلب) يذوب في الماء (سائل)، لذا هو محلول صلب × سائل.", icon: "☕" },
-            { question: "لماذا يُصنف محلول الملح في الماء كـ 'محلول سائل'؟", options: ["لأن الملح سائل", "لأن المذيب (الماء) حالته سائلة", "لأن المذاب كثير", "لأنه يتبخر بسرعة"], answer: 1, feedback: "نوع المحلول يتبع حالة المذيب، وبما أن الماء (المذيب) سائل، فالمحلول سائل.", icon: "🌊" },
+            { question: "يعتبر السكر المذاب في الماء مثالاً على محلول:", options: ["صلب × سائل", "سائل × سائل", "غاز × سائل", "صلب × صلب"], answer: 0, feedback: "السكر (صلب) يذوب في الماء (سائل).", icon: "☕" },
+            { question: "لماذا يُصنف محلول الملح في الماء كـ 'محلول سائل'؟", options: ["لأن الملح سائل", "لأن المذيب (الماء) حالته سائلة", "لأن المذاب كثير", "لأنه يتبخر بسرعة"], answer: 1, feedback: "نوع المحلول يتبع حالة المذيب، وبما أن الماء سائل فالمحلول سائل.", icon: "🌊" },
             { question: "في محلول الخل، ما هي حالة المذاب والمذيب؟", options: ["صلب × سائل", "غاز × سائل", "سائل × سائل", "غاز × غاز"], answer: 2, feedback: "الخل يتكون من حمض الخليك (سائل) مذاب في الماء (سائل).", icon: "🍶" },
-            { question: "ما هو المذاب في الخل ونسبته 5% تقريباً؟", options: ["الماء", "غاز الأكسجين", "حمض الخليك", "النيتروجين"], answer: 2, feedback: "المذاب هو حمض الخليك (بنسبة 5%) والمذيب هو الماء.", icon: "🥗" },
-            { question: "المشروبات الغازية عبارة عن محلول من نوع:", options: ["صلب × سائل", "غاز × سائل", "سائل × سائل", "غاز × غاز"], answer: 1, feedback: "المشروبات الغازية تتكون من غاز (CO2) مذاب في سائل (ماء).", icon: "🥤" },
-            { question: "ما هو الغاز المذاب في المشروبات الغازية؟", options: ["الأكسجين", "النيتروجين", "الهيدروجين", "ثاني أكسيد الكربون CO2"], answer: 3, feedback: "الغاز المذاب في المشروبات الغازية هو غاز ثاني أكسيد الكربون (CO2).", icon: "🫧" },
-            { question: "ماء البحر (المحيط) يعتبر محلولاً يحتوي على:", options: ["ملح وماء فقط", "ملح (صلب) وأكسجين (غاز) في ماء (سائل)", "غازات فقط", "سوائل فقط"], answer: 1, feedback: "ماء البحر يحتوي على ملح (صلب) وأكسجين (غاز) كلاهما مذاب في الماء (سائل).", icon: "🦈" },
-            { question: "المحاليل التي يكون فيها المذيب 'صلب' تُعرف غالباً باسم:", options: ["السبائك الفلزية", "المحاليل المائية", "المشروبات", "الغازات الدفيئة"], answer: 0, feedback: "المحاليل الصلبة هي السبائك الفلزية حيث يذوب صلب في صلب.", icon: "🛡️" },
-            { question: "سبيكة الفولاذ تتكون من:", options: ["نحاس وخارصين", "حديد وكربون", "سكر وماء", "حديد ونحاس"], answer: 1, feedback: "الفولاذ عبارة عن سبيكة (محلول صلب) تتكون من حديد (مذيب) وكربون (مذاب).", icon: "🏗️" },
-            { question: "في سبيكة الفولاذ، ما هي نسبة الحديد (المذيب)؟", options: ["70%", "30%", "96%", "5%"], answer: 2, feedback: "نسبة الحديد في الفولاذ هي 96%، لذا فهو المذيب.", icon: "⚙️" },
-            { question: "سبيكة 'النحاس الأصفر' تتكون من صلب × صلب، وهما:", options: ["نحاس وخارصين", "حديد وكربون", "نحاس وحديد", "خارصين وكربون"], answer: 0, feedback: "النحاس الأصفر يتكون من نحاس (مذيب) وخارصين (مذاب).", icon: "🎺" },
+            { question: "ما هو المذاب في الخل ونسبته 5% تقريباً؟", options: ["الماء", "غاز الأكسجين", "حمض الخليك", "النيتروجين"], answer: 2, feedback: "المذاب هو حمض الخليك والمذيب هو الماء.", icon: "🥗" },
+            { question: "المشروبات الغازية عبارة عن محلول من نوع:", options: ["صلب × سائل", "غاز × سائل", "سائل × سائل", "غاز × غاز"], answer: 1, feedback: "المشروبات الغازية غاز (CO2) مذاب في سائل (ماء).", icon: "🥤" },
+            { question: "ما هو الغاز المذاب في المشروبات الغازية؟", options: ["الأكسجين", "النيتروجين", "الهيدروجين", "ثاني أكسيد الكربون CO2"], answer: 3, feedback: "الغاز المذاب في المشروبات الغازية هو (CO2).", icon: "🫧" },
+            { question: "ماء البحر (المحيط) يعتبر محلولاً يحتوي على:", options: ["ملح وماء فقط", "ملح (صلب) وأكسجين (غاز) في ماء", "غازات فقط", "سوائل فقط"], answer: 1, feedback: "ماء البحر يحتوي على ملح وأكسجين مذابين في الماء.", icon: "🦈" },
+            { question: "المحاليل التي يكون فيها المذيب 'صلب' تُعرف غالباً باسم:", options: ["السبائك الفلزية", "المحاليل المائية", "المشروبات", "الغازات الدفيئة"], answer: 0, feedback: "المحاليل الصلبة هي السبائك الفلزية.", icon: "🛡️" },
+            { question: "سبيكة الفولاذ تتكون من:", options: ["نحاس وخارصين", "حديد وكربون", "سكر وماء", "حديد ونحاس"], answer: 1, feedback: "الفولاذ سبيكة تتكون من حديد (مذيب) وكربون (مذاب).", icon: "🏗️" },
+            { question: "في سبيكة الفولاذ، ما هي نسبة الحديد (المذيب)؟", options: ["70%", "30%", "96%", "5%"], answer: 2, feedback: "نسبة الحديد في الفولاذ هي 96%.", icon: "⚙️" },
+            { question: "سبيكة 'النحاس الأصفر' تتكون من صلب × صلب، وهما:", options: ["نحاس وخارصين", "حديد وكربون", "نحاس وحديد", "خارصين وكربون"], answer: 0, feedback: "النحاس الأصفر يتكون من نحاس وخارصين.", icon: "🎺" },
             { question: "ما هي نسبة النحاس في سبيكة النحاس الأصفر؟", options: ["30%", "50%", "70%", "96%"], answer: 2, feedback: "نسبة النحاس هي 70% بينما الخارصين 30%.", icon: "🪙" },
-            { question: "ما الغاز الذي يمثل 78% من الهواء الجوي ويعتبر المذيب؟", options: ["غاز الأكسجين", "غاز النيتروجين", "ثاني أكسيد الكربون", "الغازات الأخرى"], answer: 1, feedback: "غاز النيتروجين هو الغاز الأكثر تواجداً بنسبة 78% لذا هو المذيب.", icon: "☁️" },
-            { question: "في الهواء الجوي، ماذا نعتبر 'الغازات الأخرى'؟", options: ["مذيب", "مذاب", "محلول صلب", "راسب"], answer: 1, feedback: "الغازات الأخرى توجد بنسبة قليلة جداً لذا تعتبر مذاباً.", icon: "🌬️" },
+            { question: "ما الغاز الذي يمثل 78% من الهواء الجوي ويعتبر المذيب؟", options: ["غاز الأكسجين", "غاز النيتروجين", "ثاني أكسيد الكربون", "الغازات الأخرى"], answer: 1, feedback: "غاز النيتروجين هو الغاز الأكثر تواجداً لذا هو المذيب.", icon: "☁️" },
+            { question: "في الهواء الجوي، ماذا نعتبر 'الغازات الأخرى'؟", options: ["مذيب", "مذاب", "محلول صلب", "راسب"], answer: 1, feedback: "الغازات الأخرى توجد بنسبة قليلة لذا تعتبر مذاباً.", icon: "🌬️" },
             { question: "بناءً على نسبة الحديد (96%) في سبيكة الفولاذ، كم تبلغ نسبة الكربون (المذاب) تقريباً؟", options: ["10%", "30%", "4%", "70%"], answer: 2, feedback: "إذا كان الحديد 96%، فإن النسبة المتبقية للكربون هي 4%.", icon: "🧲" },
-            { question: "ما هي حالة المذاب والمذيب في سبيكة النحاس الأصفر على الترتيب؟", options: ["سائل × صلب", "صلب × صلب", "غاز × صلب", "صلب × سائل"], answer: 1, feedback: "السبائك الفلزية هي محاليل صلبة تتكون من صلب مذاب في صلب.", icon: "🔔" },
-            { question: "في محلول الخل التجاري، أي المادتين تمثل المذيب؟", options: ["حمض الخليك", "الماء", "الكحول", "غاز CO2"], answer: 1, feedback: "الماء هو المذيب لأنه يمثل النسبة الأكبر مقابل 5% لحمض الخليك.", icon: "💧" },
-            { question: "اذكر مثالاً لمحلول سائل ناتج عن ذوبان سائل في سائل ورد في المخطط:", options: ["الفولاذ", "المشروبات الغازية", "الخل", "الهواء الجوي"], answer: 2, feedback: "الخل هو مثال لذوبان سائل (حمض الخليك) في سائل (الماء).", icon: "🥗" },
+            { question: "ما هي حالة المذاب والمذيب في سبيكة النحاس الأصفر على الترتيب؟", options: ["سائل × صلب", "صلب × صلب", "غاز × صلب", "صلب × سائل"], answer: 1, feedback: "السبائك الفلزية هي محاليل تتكون من صلب مذاب في صلب.", icon: "🔔" },
+            { question: "في محلول الخل التجاري، أي المادتين تمثل المذيب؟", options: ["حمض الخليك", "الماء", "الكحول", "غاز CO2"], answer: 1, feedback: "الماء هو المذيب لأنه يمثل النسبة الأكبر.", icon: "💧" },
+            { question: "اذكر مثالاً لمحلول سائل ناتج عن ذوبان سائل في سائل ورد في المخطط:", options: ["الفولاذ", "المشروبات الغازية", "الخل", "الهواء الجوي"], answer: 2, feedback: "الخل هو مثال لذوبان سائل في سائل.", icon: "🥗" },
             { question: "ورد في المخطط أسماء أخرى لبعض أنواع الخل مثل:", options: ["خل التفاح وخل القصب", "خل العنب وخل الأرز", "الخل الأبيض وخل البلسميك", "خل التمر وخل جوز الهند"], answer: 0, feedback: "الصورة ذكرت أمثلة مثل (خل التفاح - خل القصب).", icon: "🍎" },
-            { question: "أي من المحاليل التالية يحتوي على أكثر من نوع من المذاب (صلب وغاز)؟", options: ["المشروبات الغازية", "ماء البحر (المحيط)", "سبيكة الفولاذ", "محلول السكر"], answer: 1, feedback: "ماء البحر يحتوي على ملح (صلب) وأكسجين (غاز) معاً في الماء.", icon: "🌊" },
+            { question: "أي من المحاليل التالية يحتوي على أكثر من نوع من المذاب (صلب وغاز)؟", options: ["المشروبات الغازية", "ماء البحر (المحيط)", "سبيكة الفولاذ", "محلول السكر"], answer: 1, feedback: "ماء البحر يحتوي على ملح وأكسجين معاً.", icon: "🌊" },
             { question: "في ماء المحيط، ما هي الحالة الفيزيائية للمذيب؟", options: ["صلب", "غاز", "سائل", "بلازما"], answer: 2, feedback: "المذيب في ماء المحيط هو الماء، وحالته سائلة.", icon: "🛥️" },
-            { question: "في محلول (ملح × ماء)، لماذا تم تصنيف المحلول كـ 'محلول سائل' رغم أن الملح صلب؟", options: ["لأن الملح يتحول لسائل", "لأن المذيب (الماء) سائل", "لأن الملح يتبخر", "لأن كمية الملح أكبر"], answer: 1, feedback: "نوع المحلول يتبع دائماً حالة المذيب، وبما أن الماء سائل فالمحلول سائل.", icon: "🧂" },
-            { question: "لماذا يعتبر 'النحاس الأصفر' محلولاً صلباً؟", options: ["لأن المذيب (النحاس) حالته صلبة", "لأنه لا يذوب في الماء", "لأن المذاب سائل", "لأن لونه أصفر"], answer: 0, feedback: "تحدد نوع المحلول على حسب حالة المذيب، والنحاس (المذيب) حالته صلبة.", icon: "🎷" },
+            { question: "في محلول (ملح × ماء)، لماذا تم تصنيف المحلول كـ 'محلول سائل' رغم أن الملح صلب؟", options: ["لأن الملح يتحول لسائل", "لأن المذيب (الماء) سائل", "لأن الملح يتبخر", "لأن كمية الملح أكبر"], answer: 1, feedback: "نوع المحلول يتبع دائماً حالة المذيب.", icon: "🧂" },
+            { question: "لماذا يعتبر 'النحاس الأصفر' محلولاً صلباً؟", options: ["لأن المذيب (النحاس) حالته صلبة", "لأنه لا يذوب في الماء", "لأن المذاب سائل", "لأن لونه أصفر"], answer: 0, feedback: "تحدد نوع المحلول على حسب حالة المذيب.", icon: "🎷" },
             { question: "المادة التي توجد بكمية أقل دائماً في أي محلول تسمى:", options: ["المذيب", "المذاب", "المركب", "العنصر"], answer: 1, feedback: "المادة الموجودة بقلة في المحلول يُطلق عليها اسم 'مذاب'.", icon: "📉" },
             { question: "لكي نصنع محلولاً غازياً، الشرط الأساسي هو أن يكون المذيب:", options: ["صلباً", "سائلاً", "غازاً", "ماءً"], answer: 2, feedback: "المحلول الغازي يجب أن يكون المذيب فيه عبارة عن غاز.", icon: "🎈" },
-            { question: "في الهواء الجوي، لماذا نعتبر غاز الأكسجين (21%) مذاباً وليس مذيباً؟", options: ["لأنه غاز", "لأنه أثقل من النيتروجين", "لأنه يتنفسه الإنسان", "لأنه يوجد بنسبة أقل من النيتروجين"], answer: 3, feedback: "النسبة الأقل (21%) تجعله مذاباً، بينما النيتروجين (78%) هو المذيب.", icon: "📊" },
-            { question: "أي من التالي يُصنف كـ 'سبائك فلزية' وفقاً للصورة؟", options: ["الفولاذ والنحاس الأصفر", "الحديد والنحاس النقي", "الذهب والفضة", "الماء والملح"], answer: 0, feedback: "الصورة ذكرت الفولاذ والنحاس الأصفر كأمثلة على السبائك الفلزية.", icon: "⚔️" },
+            { question: "في الهواء الجوي، لماذا نعتبر غاز الأكسجين (21%) مذاباً وليس مذيباً؟", options: ["لأنه غاز", "لأنه أثقل من النيتروجين", "لأنه يتنفسه الإنسان", "لأنه يوجد بنسبة أقل"], answer: 3, feedback: "النسبة الأقل (21%) تجعله مذاباً.", icon: "📊" },
+            { question: "أي من التالي يُصنف كـ 'سبائك فلزية' وفقاً للصورة؟", options: ["الفولاذ والنحاس الأصفر", "الحديد والنحاس النقي", "الذهب والفضة", "الماء والملح"], answer: 0, feedback: "الصورة ذكرت الفولاذ والنحاس الأصفر كأمثلة للسبائك.", icon: "⚔️" },
             { question: "ما هي حالة المذاب في محلول 'سكر × ماء'؟", options: ["صلب", "سائل", "غاز", "جميع ما سبق"], answer: 0, feedback: "السكر هو المذاب وحالته الفيزيائية هي صلب.", icon: "🍬" },
             { question: "إذا كانت نسبة النحاس 70% في سبيكة النحاس الأصفر، فكم نسبة الخارصين؟", options: ["10%", "20%", "30%", "40%"], answer: 2, feedback: "النسبة المكملة لـ 100% هي 30% للخارصين.", icon: "🧮" },
             { question: "في المشروبات الغازية، ماذا تمثل عبارة 'غاز × سائل'؟", options: ["مذيب × مذاب", "مذاب × مذيب", "غازان مختلفان", "سائلان مختلفان"], answer: 1, feedback: "تعني أن الغاز (مذاب) تم إذابته في السائل (مذيب).", icon: "📝" },
-            { question: "أي من هذه المحاليل يحتوي على مذاب غازي في مذيب سائل؟", options: ["ماء البحر والمشروبات الغازية", "الخل وماء البحر", "الفولاذ والنحاس الأصفر", "الهواء الجوي"], answer: 0, feedback: "كلاهما يحتوي على غاز مذاب في سائل (CO2 في المشروبات، وأكسجين في البحر).", icon: "💡" },
-            { question: "تلخيصاً للخريطة الذهنية: نوع المحلول يتبع دائماً...", options: ["حالة المذاب", "حالة المذيب", "كمية المذاب", "لون المحلول"], answer: 1, feedback: "القاعدة الذهبية المكتوبة في الأعلى: تحدد نوع المحلول على حسب حالة المذيب.", icon: "📌" }
+            { question: "أي من هذه المحاليل يحتوي على مذاب غازي في مذيب سائل؟", options: ["ماء البحر والمشروبات الغازية", "الخل وماء البحر", "الفولاذ والنحاس الأصفر", "الهواء الجوي"], answer: 0, feedback: "كلاهما يحتوي على غاز مذاب في سائل.", icon: "💡" },
+            { question: "تلخيصاً للخريطة الذهنية: نوع المحلول يتبع دائماً...", options: ["حالة المذاب", "حالة المذيب", "كمية المذاب", "لون المحلول"], answer: 1, feedback: "تحدد نوع المحلول على حسب حالة المذيب.", icon: "📌" }
         ];
 
-        const gradients = [
-            "linear-gradient(135deg, #1cb5e0 0%, #000046 100%)",
-            "linear-gradient(135deg, #FF8008 0%, #FFA03A 100%)",
-            "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)",
-            "linear-gradient(135deg, #FC466B 0%, #3F5EFB 100%)",
-            "linear-gradient(135deg, #4b6cb7 0%, #182848 100%)"
-        ];
-
-        let currentStudentName = "";
-        let currentStudentClass = "";
+        // المتغيرات لحفظ الحالة
+        let studentName = "";
+        let studentClass = "";
         let score = 0;
-        let currentSlideIndex = 0;
         
-        // متغيرات للتحكم بوضع الإعادة
-        let isRetryMode = false;
-        let wrongAnswers = []; 
-        let activeQuestions = []; 
+        let currentSequence = []; // مصفوفة للأسئلة المراد عرضها
+        let currentSeqIndex = 0; // المؤشر الحالي
+        let wrongAnswersIndices = []; // لحفظ أرقام الأسئلة الخاطئة
+        let isReviewMode = false; // هل نحن في وضع المراجعة؟
 
         function startQuiz() {
-            const nameInput = document.getElementById('student-name').value;
-            const classInput = document.getElementById('student-class').value;
-
-            if(nameInput.trim() === "" || classInput === "") {
-                alert("الرجاء إدخال اسمك واختيار صفك للبدء!");
+            studentName = document.getElementById('studentName').value.trim();
+            studentClass = document.getElementById('studentClass').value;
+            
+            if (!studentName || !studentClass) {
+                alert("الرجاء إدخال اسمك واختيار الصف قبل البدء!");
                 return;
             }
 
-            currentStudentName = nameInput;
-            currentStudentClass = classInput;
-            
-            // تعيين جميع الأسئلة للمحاولة الأولى
-            activeQuestions = Array.from({length: quizData.length}, (_, i) => i);
+            // إعداد الأسئلة للوضع الطبيعي (من 0 إلى 39)
+            currentSequence = Array.from({length: quizData.length}, (_, i) => i);
+            currentSeqIndex = 0;
+            score = 0;
+            wrongAnswersIndices = [];
+            isReviewMode = false;
 
-            document.getElementById('welcome-screen').style.display = 'none';
-            document.getElementById('progress-wrapper').style.display = 'block';
-            document.getElementById('progress-text').style.display = 'block';
-            
-            buildQuiz();
-            updateProgress(0);
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('quiz-screen').classList.add('active');
+            loadQuestion();
         }
 
-        function buildQuiz() {
-            const container = document.getElementById('quiz-slides');
-            container.innerHTML = ''; // مسح الشرائح القديمة
+        function loadQuestion() {
+            let actualQuestionIndex = currentSequence[currentSeqIndex];
+            let q = quizData[actualQuestionIndex];
 
-            activeQuestions.forEach((qIndex, index) => {
-                const q = quizData[qIndex];
-                const slide = document.createElement('div');
-                slide.className = `slide ${index === 0 ? 'active' : ''}`;
-                slide.style.background = gradients[qIndex % gradients.length];
-                slide.id = `slide-${index}`;
+            // تحديث الخلفية
+            document.getElementById('quiz-screen').style.background = gradients[actualQuestionIndex % gradients.length];
+            
+            // تحديث شريط التقدم
+            let currentNumber = currentSeqIndex + 1;
+            let totalNumber = currentSequence.length;
+            document.getElementById('progress-text').innerText = isReviewMode ? `مراجعة: السؤال ${currentNumber} من ${totalNumber}` : `السؤال ${currentNumber} من ${totalNumber}`;
+            let progressPercent = (currentNumber / totalNumber) * 100;
+            document.getElementById('progress-bar-fill').style.width = progressPercent + '%';
 
-                const icon = `<div class="icon">${q.icon}</div>`;
-                const question = `<h2 class="question-text">${q.question}</h2>`;
-                
-                let optionsHtml = '<div class="options-grid">';
-                q.options.forEach((opt, optIndex) => {
-                    optionsHtml += `<button class="option-btn" onclick="checkAnswer(${qIndex}, ${optIndex}, this, ${index})">${opt}</button>`;
-                });
-                optionsHtml += '</div>';
-
-                const feedback = `
-                    <div class="feedback-container">
-                        <div class="feedback-text" id="feedback-${index}"></div>
-                        <button class="next-btn" id="next-${index}" onclick="nextSlide()">السؤال التالي ➔</button>
-                    </div>
-                `;
-
-                slide.innerHTML = icon + question + optionsHtml + feedback;
-                container.appendChild(slide);
+            // تعبئة البيانات
+            document.getElementById('q-icon').innerText = q.icon;
+            document.getElementById('q-text').innerText = q.question;
+            
+            let optionsHtml = '';
+            q.options.forEach((opt, index) => {
+                optionsHtml += `<button class="option-btn" onclick="checkAnswer(${index}, this)">${opt}</button>`;
             });
+            document.getElementById('q-options').innerHTML = optionsHtml;
 
-            // شريحة النتيجة
-            const resultSlide = document.createElement('div');
-            resultSlide.className = 'slide';
-            resultSlide.id = 'result-slide';
-            resultSlide.innerHTML = `
-                <div class="icon">🏆</div>
-                <h2 class="question-text" id="result-title">أحسنت يا ${currentStudentName}!</h2>
-                <h2 class="question-text" id="final-score" style="font-size: 3rem; color: #f1c40f;"></h2>
-                
-                <div id="loading-msg" class="loading-text">جاري إرسال النتيجة للمعلم... ⏳</div>
-                <div id="success-msg" class="loading-text" style="color: #2ecc71;">تم تسجيل النتيجة بنجاح! ✅</div>
-                
-                <div class="action-btns" id="action-btns" style="display: none;">
-                    <button class="retry-btn" id="retry-btn" onclick="startRetry()" style="display:none;">مراجعة أسئلتي الخاطئة 📝</button>
-                    <button class="restart-btn" onclick="location.reload()">إعادة الاختبار من البداية 🔄</button>
-                </div>
-            `;
-            container.appendChild(resultSlide);
+            // إخفاء التغذية الراجعة والزر
+            document.getElementById('q-feedback').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
         }
 
-        function checkAnswer(actualQuestionIndex, selectedOptionIndex, btnElement, slideIndex) {
-            const question = quizData[actualQuestionIndex];
-            const slide = document.getElementById(`slide-${slideIndex}`);
-            const buttons = slide.querySelectorAll('.option-btn');
-            const feedbackText = document.getElementById(`feedback-${slideIndex}`);
-            const nextBtn = document.getElementById(`next-${slideIndex}`);
-
-            // تعطيل الأزرار
+        function checkAnswer(selectedIndex, btnElement) {
+            let actualQuestionIndex = currentSequence[currentSeqIndex];
+            let q = quizData[actualQuestionIndex];
+            let buttons = document.querySelectorAll('.option-btn');
+            
+            // تعطيل الأزرار لمنع النقر المتعدد
             buttons.forEach(btn => btn.disabled = true);
 
-            const isCorrect = selectedOptionIndex === question.answer;
+            let isCorrect = (selectedIndex === q.answer);
+            let feedbackElement = document.getElementById('q-feedback');
 
             if (isCorrect) {
                 btnElement.classList.add('correct');
-                feedbackText.innerHTML = "✅ إجابة صحيحة!<br>" + question.feedback;
-                feedbackText.style.backgroundColor = "rgba(46, 204, 113, 0.95)";
-                // زيادة الدرجة فقط إذا لم نكن في وضع الإعادة
-                if (!isRetryMode) {
-                    score++;
-                }
+                feedbackElement.innerHTML = "✅ إجابة صحيحة!<br>" + q.feedback;
+                feedbackElement.style.backgroundColor = "rgba(46, 204, 113, 0.95)";
+                if (!isReviewMode) score++; // لا تزيد الدرجة إذا كان في وضع المراجعة
             } else {
                 btnElement.classList.add('wrong');
-                buttons[question.answer].classList.add('correct');
-                feedbackText.innerHTML = "❌ إجابة خاطئة.<br>" + question.feedback;
-                feedbackText.style.backgroundColor = "rgba(231, 76, 60, 0.95)";
-                // تسجيل السؤال الخاطئ فقط في المحاولة الأولى
-                if (!isRetryMode) {
-                    wrongAnswers.push(actualQuestionIndex);
-                }
+                buttons[q.answer].classList.add('correct');
+                feedbackElement.innerHTML = "❌ إجابة خاطئة.<br>" + q.feedback;
+                feedbackElement.style.backgroundColor = "rgba(231, 76, 60, 0.95)";
+                if (!isReviewMode) wrongAnswersIndices.push(actualQuestionIndex); // تسجيل الخطأ للمراجعة لاحقاً
             }
 
-            feedbackText.style.display = 'block';
+            feedbackElement.style.display = 'block';
             
-            if(slideIndex === activeQuestions.length - 1) {
-                nextBtn.innerText = "إنهاء وعرض النتيجة 🏁";
+            let nextBtn = document.getElementById('next-btn');
+            if (currentSeqIndex === currentSequence.length - 1) {
+                nextBtn.innerText = isReviewMode ? "إنهاء المراجعة 🏁" : "عرض النتيجة النهائية 🏁";
+            } else {
+                nextBtn.innerText = "السؤال التالي ➔";
             }
             nextBtn.style.display = 'block';
         }
 
-        function nextSlide() {
-            const currentSlide = document.getElementById(`slide-${currentSlideIndex}`);
-            currentSlide.classList.remove('active');
-            
-            currentSlideIndex++;
-            updateProgress(currentSlideIndex);
-            
-            if (currentSlideIndex < activeQuestions.length) {
-                const nextSlideElement = document.getElementById(`slide-${currentSlideIndex}`);
-                nextSlideElement.classList.add('active');
+        function handleNextAction() {
+            currentSeqIndex++;
+            if (currentSeqIndex < currentSequence.length) {
+                loadQuestion();
             } else {
-                showResults();
+                showResult();
             }
         }
 
-        function updateProgress(index) {
-            const total = activeQuestions.length;
-            if (index < total) {
-                const percentage = ((index) / total) * 100;
-                document.getElementById('progress-bar').style.width = percentage + '%';
-                document.getElementById('progress-text').innerText = `السؤال ${index + 1} من ${total}`;
-            } else {
-                document.getElementById('progress-bar').style.width = '100%';
-                document.getElementById('progress-text').style.display = 'none';
-                document.getElementById('progress-wrapper').style.display = 'none';
-            }
-        }
+        function showResult() {
+            document.getElementById('quiz-screen').classList.remove('active');
+            document.getElementById('result-screen').classList.add('active');
 
-        function showResults() {
-            const resultSlide = document.getElementById('result-slide');
-            resultSlide.classList.add('active');
-            
-            if (!isRetryMode) {
-                document.getElementById('final-score').innerText = `نتيجتك المعتمدة: ${score} من ${quizData.length}`;
-                sendDataToGoogle();
+            if (!isReviewMode) {
+                // إظهار الدرجة
+                document.getElementById('final-score').innerText = `نتيجتك: ${score} من ${quizData.length}`;
                 
-                // إظهار زر الإعادة إذا كان هناك أخطاء
-                if (wrongAnswers.length > 0) {
-                    document.getElementById('retry-btn').style.display = 'block';
+                // إظهار زر المراجعة إذا كان هناك أخطاء
+                if (wrongAnswersIndices.length > 0) {
+                    document.getElementById('review-btn').style.display = 'inline-block';
                 }
-            } else {
-                document.getElementById('result-title').innerText = "أنهيت مراجعة الأخطاء!";
-                document.getElementById('final-score').innerText = `ستبقى نتيجتك المعتمدة: ${score} من ${quizData.length}`;
-                document.getElementById('action-btns').style.display = 'flex';
-                // إخفاء رسائل الإرسال في وضع الإعادة
-                document.getElementById('loading-msg').style.display = 'none';
-                document.getElementById('success-msg').style.display = 'none';
-            }
-        }
 
-        function startRetry() {
-            isRetryMode = true;
-            activeQuestions = [...wrongAnswers]; // نسخ الأسئلة الخاطئة
-            wrongAnswers = []; // تفريغها للمحاولة الجديدة
-            currentSlideIndex = 0;
-            
-            document.getElementById('progress-wrapper').style.display = 'block';
-            document.getElementById('progress-text').style.display = 'block';
-            
-            buildQuiz();
-            updateProgress(0);
+                // إرسال البيانات لجوجل شيت (في الخلفية)
+                sendDataToGoogle();
+            } else {
+                // أنهى وضع المراجعة
+                document.getElementById('result-msg').innerText = "تم الانتهاء من مراجعة أخطائك!";
+                document.getElementById('review-btn').style.display = 'none';
+                document.getElementById('loading-msg').style.display = 'none';
+            }
         }
 
         function sendDataToGoogle() {
-            document.getElementById('loading-msg').style.display = 'block';
-            document.getElementById('action-btns').style.display = 'none';
+            document.getElementById('loading-msg').innerText = "جاري إرسال النتيجة للأستاذ... ⏳";
+            
+            const formData = new FormData();
+            formData.append('name', studentName);
+            formData.append('studentClass', studentClass);
+            formData.append('score', score);
 
-            const url = `${GOOGLE_SCRIPT_URL}?name=${encodeURIComponent(currentStudentName)}&studentClass=${encodeURIComponent(currentStudentClass)}&score=${score}`;
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                document.getElementById('loading-msg').innerText = "✅ تم تسجيل النتيجة عند الأستاذ بنجاح!";
+                document.getElementById('loading-msg').style.color = "#2ecc71";
+            })
+            .catch(error => {
+                document.getElementById('loading-msg').innerText = "⚠️ حدث خطأ أثناء إرسال النتيجة.";
+                document.getElementById('loading-msg').style.color = "#e74c3c";
+                console.error('Error!', error.message);
+            });
+        }
 
-            fetch(url, { method: 'GET', mode: 'no-cors' })
-                .then(() => {
-                    document.getElementById('loading-msg').style.display = 'none';
-                    document.getElementById('success-msg').style.display = 'block';
-                    document.getElementById('action-btns').style.display = 'flex';
-                })
-                .catch(error => {
-                    console.error('Error!', error.message);
-                    document.getElementById('loading-msg').innerText = "حدث خطأ أثناء الإرسال. لا تقلق، لقد تم حفظ النتيجة محلياً.";
-                    document.getElementById('loading-msg').style.color = "#e74c3c";
-                    document.getElementById('action-btns').style.display = 'flex';
-                });
+        function startReviewMode() {
+            isReviewMode = true;
+            currentSequence = [...wrongAnswersIndices]; // نضع فقط الأسئلة الخاطئة في الطابور
+            currentSeqIndex = 0;
+            
+            document.getElementById('result-screen').classList.remove('active');
+            document.getElementById('quiz-screen').classList.add('active');
+            
+            loadQuestion();
         }
     </script>
 </body>
