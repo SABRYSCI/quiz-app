@@ -22,7 +22,7 @@
 
         body, html {
             height: 100%;
-            overflow: hidden;
+            overflow: hidden; /* لمنع التمرير المزدوج */
             background-color: #2c3e50;
         }
 
@@ -40,6 +40,8 @@
             padding: 2rem;
             text-align: center;
             animation: fadeIn 0.5s ease-in-out;
+            overflow-y: auto; /* السماح بالتمرير الداخلي في حال صغر الشاشة */
+            -webkit-overflow-scrolling: touch;
         }
 
         .screen.active {
@@ -102,20 +104,20 @@
 
         /* --- شريط التقدم --- */
         #progress-wrapper {
-            position: absolute;
-            top: 20px;
+            position: fixed; /* تم جعله ثابتاً في الأعلى */
+            top: 15px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
             max-width: 800px;
-            background: rgba(0,0,0,0.6);
-            padding: 15px 25px;
+            background: rgba(0,0,0,0.8);
+            padding: 12px 20px;
             border-radius: 30px;
-            z-index: 10;
+            z-index: 1000;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         #progress-text {
@@ -126,9 +128,9 @@
 
         #progress-bar-bg {
             width: 100%;
-            height: 12px;
+            height: 10px;
             background: rgba(255,255,255,0.2);
-            border-radius: 6px;
+            border-radius: 5px;
             overflow: hidden;
         }
 
@@ -144,7 +146,7 @@
             font-size: 5rem;
             margin-bottom: 1rem;
             filter: drop-shadow(0px 8px 10px rgba(0,0,0,0.3));
-            margin-top: 60px; /* لترك مساحة لشريط التقدم */
+            margin-top: 100px; /* لترك مساحة لشريط التقدم الثابت */
         }
 
         .question-text {
@@ -204,11 +206,12 @@
             font-size: 1.6rem;
             font-weight: 700;
             color: #fff;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.8);
             padding: 1rem 2rem;
             border-radius: 15px;
             display: none;
             max-width: 800px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .next-btn {
@@ -255,34 +258,55 @@
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- التوافق مع الهواتف المحمولة --- */
+        /* --- التوافق الجذري مع الهواتف المحمولة --- */
         @media (max-width: 768px) {
+            .screen {
+                justify-content: flex-start; /* بدء المحتوى من الأعلى لتفادي اقتصاصه */
+                padding-bottom: 120px; /* ترك مساحة فارغة بالأسفل لزر التالي */
+            }
             .options-grid {
                 grid-template-columns: 1fr; 
                 width: 95%;
                 gap: 10px;
             }
             .question-text {
-                font-size: 1.6rem; 
-                margin-bottom: 1rem;
-                margin-top: 1rem;
+                font-size: 1.5rem; 
+                margin-bottom: 15px;
+                margin-top: 0;
             }
             .option-btn {
                 font-size: 1.2rem; 
                 padding: 1rem;
             }
             .icon {
-                font-size: 3rem;
-                margin-bottom: 0.5rem;
-                margin-top: 80px;
+                font-size: 3.5rem;
+                margin-bottom: 10px;
+                margin-top: 100px;
             }
             .feedback-text {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
                 padding: 0.8rem;
+                width: 95%;
             }
+            .feedback-container {
+                margin-top: 10px;
+            }
+            /* السحر هنا: تثبيت زر التالي في أسفل الشاشة ليظهر دائماً فوق كل شيء */
             .next-btn {
-                font-size: 1.3rem;
-                padding: 0.8rem 2rem;
+                position: fixed;
+                bottom: 15px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                font-size: 1.5rem;
+                padding: 1rem;
+                z-index: 9999; /* لضمان ظهوره فوق جميع العناصر */
+                box-shadow: 0 -4px 15px rgba(0,0,0,0.4);
+                border: 3px solid #fff;
+                margin-top: 0;
+            }
+            .next-btn:hover {
+                transform: translateX(-50%) scale(1.02);
             }
             .login-box h2 {
                 font-size: 1.5rem;
@@ -343,7 +367,6 @@
     </div>
 
     <script>
-        // رابط سكربت جوجل لإرسال النتائج
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdkZs9U0-TK2E7mR90xPqfQQvBMWl_mqjECyDGE8-IvN-8_bkKKyyFdcIx8g2Gv7EM/exec";
 
         const gradients = [
@@ -406,10 +429,10 @@
         let studentClass = "";
         let score = 0;
         
-        let currentSequence = []; // مصفوفة للأسئلة المراد عرضها
-        let currentSeqIndex = 0; // المؤشر الحالي
-        let wrongAnswersIndices = []; // لحفظ أرقام الأسئلة الخاطئة
-        let isReviewMode = false; // هل نحن في وضع المراجعة؟
+        let currentSequence = [];
+        let currentSeqIndex = 0;
+        let wrongAnswersIndices = [];
+        let isReviewMode = false;
 
         function startQuiz() {
             studentName = document.getElementById('studentName').value.trim();
@@ -420,7 +443,6 @@
                 return;
             }
 
-            // إعداد الأسئلة للوضع الطبيعي (من 0 إلى 39)
             currentSequence = Array.from({length: quizData.length}, (_, i) => i);
             currentSeqIndex = 0;
             score = 0;
@@ -429,6 +451,9 @@
 
             document.getElementById('login-screen').classList.remove('active');
             document.getElementById('quiz-screen').classList.add('active');
+            
+            // رفع الصفحة للأعلى عند بدء الاختبار
+            document.getElementById('quiz-screen').scrollTop = 0;
             loadQuestion();
         }
 
@@ -436,17 +461,14 @@
             let actualQuestionIndex = currentSequence[currentSeqIndex];
             let q = quizData[actualQuestionIndex];
 
-            // تحديث الخلفية
             document.getElementById('quiz-screen').style.background = gradients[actualQuestionIndex % gradients.length];
             
-            // تحديث شريط التقدم
             let currentNumber = currentSeqIndex + 1;
             let totalNumber = currentSequence.length;
             document.getElementById('progress-text').innerText = isReviewMode ? `مراجعة: السؤال ${currentNumber} من ${totalNumber}` : `السؤال ${currentNumber} من ${totalNumber}`;
             let progressPercent = (currentNumber / totalNumber) * 100;
             document.getElementById('progress-bar-fill').style.width = progressPercent + '%';
 
-            // تعبئة البيانات
             document.getElementById('q-icon').innerText = q.icon;
             document.getElementById('q-text').innerText = q.question;
             
@@ -456,7 +478,6 @@
             });
             document.getElementById('q-options').innerHTML = optionsHtml;
 
-            // إخفاء التغذية الراجعة والزر
             document.getElementById('q-feedback').style.display = 'none';
             document.getElementById('next-btn').style.display = 'none';
         }
@@ -466,7 +487,6 @@
             let q = quizData[actualQuestionIndex];
             let buttons = document.querySelectorAll('.option-btn');
             
-            // تعطيل الأزرار لمنع النقر المتعدد
             buttons.forEach(btn => btn.disabled = true);
 
             let isCorrect = (selectedIndex === q.answer);
@@ -476,13 +496,13 @@
                 btnElement.classList.add('correct');
                 feedbackElement.innerHTML = "✅ إجابة صحيحة!<br>" + q.feedback;
                 feedbackElement.style.backgroundColor = "rgba(46, 204, 113, 0.95)";
-                if (!isReviewMode) score++; // لا تزيد الدرجة إذا كان في وضع المراجعة
+                if (!isReviewMode) score++;
             } else {
                 btnElement.classList.add('wrong');
                 buttons[q.answer].classList.add('correct');
                 feedbackElement.innerHTML = "❌ إجابة خاطئة.<br>" + q.feedback;
                 feedbackElement.style.backgroundColor = "rgba(231, 76, 60, 0.95)";
-                if (!isReviewMode) wrongAnswersIndices.push(actualQuestionIndex); // تسجيل الخطأ للمراجعة لاحقاً
+                if (!isReviewMode) wrongAnswersIndices.push(actualQuestionIndex);
             }
 
             feedbackElement.style.display = 'block';
@@ -494,11 +514,17 @@
                 nextBtn.innerText = "السؤال التالي ➔";
             }
             nextBtn.style.display = 'block';
+
+            // التمرير التلقائي للأسفل قليلاً ليرى الطالب التغذية الراجعة على الشاشات الصغيرة
+            setTimeout(() => {
+                feedbackElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
         }
 
         function handleNextAction() {
             currentSeqIndex++;
             if (currentSeqIndex < currentSequence.length) {
+                document.getElementById('quiz-screen').scrollTop = 0; // رفع الصفحة للأعلى عند تغيير السؤال
                 loadQuestion();
             } else {
                 showResult();
@@ -510,18 +536,14 @@
             document.getElementById('result-screen').classList.add('active');
 
             if (!isReviewMode) {
-                // إظهار الدرجة
                 document.getElementById('final-score').innerText = `نتيجتك: ${score} من ${quizData.length}`;
                 
-                // إظهار زر المراجعة إذا كان هناك أخطاء
                 if (wrongAnswersIndices.length > 0) {
                     document.getElementById('review-btn').style.display = 'inline-block';
                 }
 
-                // إرسال البيانات لجوجل شيت (في الخلفية)
                 sendDataToGoogle();
             } else {
-                // أنهى وضع المراجعة
                 document.getElementById('result-msg').innerText = "تم الانتهاء من مراجعة أخطائك!";
                 document.getElementById('review-btn').style.display = 'none';
                 document.getElementById('loading-msg').style.display = 'none';
@@ -553,11 +575,12 @@
 
         function startReviewMode() {
             isReviewMode = true;
-            currentSequence = [...wrongAnswersIndices]; // نضع فقط الأسئلة الخاطئة في الطابور
+            currentSequence = [...wrongAnswersIndices];
             currentSeqIndex = 0;
             
             document.getElementById('result-screen').classList.remove('active');
             document.getElementById('quiz-screen').classList.add('active');
+            document.getElementById('quiz-screen').scrollTop = 0;
             
             loadQuestion();
         }
