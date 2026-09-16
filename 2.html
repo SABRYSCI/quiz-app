@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار أنواع المحاليل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --correct-color: #2ecc71;
+            --wrong-color: #e74c3c;
+            --text-color: #333;
+            --btn-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background-color: #2c3e50;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screen.active { display: flex; }
+
+        #login-screen { background: linear-gradient(135deg, #1D2B64 0%, #F8CDDA 100%); }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .login-box h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-input, .login-select {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            font-weight: 700;
+        }
+
+        .login-input:focus, .login-select:focus { border-color: #3498db; }
+
+        .start-btn {
+            padding: 1rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover { background: #27ae60; transform: scale(1.05); }
+
+        #progress-wrapper {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: rgba(0,0,0,0.8);
+            padding: 12px 20px;
+            border-radius: 30px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        #progress-text { color: white; font-size: 1.2rem; font-weight: 900; }
+
+        #progress-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #progress-bar-fill {
+            height: 100%;
+            background: #2ecc71;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0px 8px 10px rgba(0,0,0,0.3));
+            margin-top: 100px;
+        }
+
+        .question-text {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 2px 4px 6px rgba(0,0,0,0.6);
+            margin-bottom: 2rem;
+            max-width: 90%;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            width: 85%;
+            max-width: 900px;
+        }
+
+        .option-btn {
+            background-color: var(--btn-bg);
+            border: 4px solid transparent;
+            border-radius: 20px;
+            padding: 1.5rem;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+            background-color: #fff;
+        }
+
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+        .option-btn.correct { background-color: var(--correct-color); color: white; border-color: #27ae60; }
+        .option-btn.wrong { background-color: var(--wrong-color); color: white; border-color: #c0392b; }
+
+        .feedback-container {
+            margin-top: 1.5rem;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .feedback-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            display: none;
+            max-width: 800px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .next-btn {
+            margin-top: 1.5rem;
+            padding: 1rem 4rem;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transition: all 0.2s;
+        }
+
+        .next-btn:hover { transform: scale(1.1); background-color: #f39c12; }
+
+        #result-screen { background: linear-gradient(135deg, #1D2B64 0%, #F8CDDA 100%); }
+        
+        .action-btn {
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 350px;
+            max-width: 90%;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .retry-btn { background-color: #fff; color: #333; }
+        .retry-btn:hover { transform: scale(1.05); }
+
+        .review-btn { background-color: #e67e22; color: #fff; display: none; }
+        .review-btn:hover { background-color: #d35400; transform: scale(1.05); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .screen { justify-content: flex-start; padding-bottom: 120px; }
+            .options-grid { grid-template-columns: 1fr; width: 95%; gap: 10px; }
+            .question-text { font-size: 1.5rem; margin-bottom: 15px; margin-top: 0; }
+            .option-btn { font-size: 1.2rem; padding: 1rem; }
+            .icon { font-size: 3.5rem; margin-bottom: 10px; margin-top: 100px; }
+            .feedback-text { font-size: 1.1rem; padding: 0.8rem; width: 95%; }
+            .feedback-container { margin-top: 10px; }
+            .next-btn {
+                position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+                width: 90%; font-size: 1.5rem; padding: 1rem; z-index: 9999;
+                box-shadow: 0 -4px 15px rgba(0,0,0,0.4); border: 3px solid #fff; margin-top: 0;
+            }
+            .next-btn:hover { transform: translateX(-50%) scale(1.02); }
+            .login-box h2 { font-size: 1.5rem; }
+            #progress-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen" class="screen active">
+        <div class="login-box">
+            <h2>🧪 أهلاً بك في اختبار المحاليل</h2>
+            <input type="text" id="studentName" class="login-input" placeholder="اكتب اسمك الثلاثي" required>
+            <select id="studentClass" class="login-select" required>
+                <option value="" disabled selected>اختر صفك</option>
+                <option value="ثاني إعدادي 1">ثاني إعدادي 1</option>
+                <option value="ثاني إعدادي 2">ثاني إعدادي 2</option>
+                <option value="ثاني إعدادي 3">ثاني إعدادي 3</option>
+                <option value="ثالث إعدادي 1">ثالث إعدادي 1</option>
+            </select>
+            <button onclick="startQuiz()" class="start-btn">ابدأ الاختبار 🚀</button>
+        </div>
+    </div>
+
+    <!-- شاشة الاختبار -->
+    <div id="quiz-screen" class="screen">
+        <div id="progress-wrapper">
+            <div id="progress-text">السؤال 1 من 10</div>
+            <div id="progress-bar-bg">
+                <div id="progress-bar-fill"></div>
+            </div>
+        </div>
+        
+        <div id="q-icon" class="icon"></div>
+        <h2 id="q-text" class="question-text"></h2>
+        <div id="q-options" class="options-grid"></div>
+        
+        <div class="feedback-container">
+            <div id="q-feedback" class="feedback-text"></div>
+            <button id="next-btn" class="next-btn" onclick="handleNextAction()">السؤال التالي ➔</button>
+        </div>
+    </div>
+
+    <!-- شاشة النتيجة -->
+    <div id="result-screen" class="screen">
+        <div class="icon" style="margin-top: 0;">🏆</div>
+        <h2 class="question-text" id="result-msg">انتهى الاختبار بنجاح!</h2>
+        <h2 class="question-text" id="final-score" style="font-size: 4rem; color: #f1c40f; margin-bottom: 3rem;"></h2>
+        
+        <div id="loading-msg" style="color: white; font-size: 1.2rem; margin-bottom: 1rem;">جاري تسجيل النتيجة للأستاذ... ⏳</div>
+
+        <button id="review-btn" class="action-btn review-btn" onclick="startReviewMode()">مراجعة أخطائي 📝</button>
+        <button class="action-btn retry-btn" onclick="location.reload()">إعادة الاختبار من البداية 🔄</button>
+    </div>
+
+    <script>
+        // ضع الرابط الخاص بك هنا بعد التحديث
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdkZs9U0-TK2E7mR90xPqfQQvBMWl_mqjECyDGE8-IvN-8_bkKKyyFdcIx8g2Gv7EM/exec";
+        
+        // اسم الورقة التي تريد إرسال البيانات إليها
+        const TARGET_SHEET_NAME = "الورقة 2"; 
+
+        const gradients = [
+            "linear-gradient(135deg, #1cb5e0 0%, #000046 100%)", "linear-gradient(135deg, #FF8008 0%, #FFA03A 100%)",
+            "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)", "linear-gradient(135deg, #FC466B 0%, #3F5EFB 100%)",
+            "linear-gradient(135deg, #4b6cb7 0%, #182848 100%)", "linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%)",
+            "linear-gradient(135deg, #00b09b 0%, #96c93d 100%)", "linear-gradient(135deg, #f12711 0%, #f5af19 100%)",
+            "linear-gradient(135deg, #654ea3 0%, #eaafc8 100%)", "linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%)"
+        ];
+
+        const quizData = [
+            { question: "المحلول الذي يمكنه إذابة كمية إضافية من المذاب عند درجة حرارة معينة يسمى:", options: ["المحلول المشبع", "المحلول غير المشبع", "المحلول فوق المشبع", "المحلول المائي"], answer: 1, feedback: "المحلول غير المشبع هو الذي لم يصل للحد الأقصى ويمكنه إذابة المزيد.", icon: "💧" },
+            { question: "محلول يحتوي على أقصى كمية ممكنة من المذاب ولا يمكنه إذابة المزيد يسمى:", options: ["غير مشبع", "مشبع", "فوق مشبع", "راسب"], answer: 1, feedback: "المحلول المشبع وصل للحد الأقصى من الإشباع وأي كمية إضافية ستترسب.", icon: "⚖️" },
+            { question: "ماذا يحدث عند تبريد محلول فوق مشبع؟", options: ["تذوب كمية أكبر من المذاب", "يتحول إلى غاز", "تترسب الكمية الزائدة عن حد الإشباع", "لا يحدث شيء"], answer: 2, feedback: "عند التبريد، يفقد المحلول قدرته على الاحتفاظ بالكمية الزائدة فتترسب.", icon: "❄️" },
+            { question: "إذا أضفنا كمية من السكر إلى محلول، فذابت بالكامل واختفت، هذا يعني أن المحلول كان:", options: ["مشبعاً", "غير مشبع", "فوق مشبع", "صلباً"], answer: 1, feedback: "بما أن المحلول تقبل المزيد وقام بإذابته، فهو غير مشبع.", icon: "🍬" },
+            { question: "كيف يمكننا إجبار المحلول المشبع على إذابة كمية إضافية ليصبح 'فوق مشبع'؟", options: ["بالتبريد", "بالتجميد", "بالتسخين", "بالترشيح"], answer: 2, feedback: "التسخين يزيد من قدرة المذيب على استيعاب كمية أكبر من المذاب مؤقتاً.", icon: "🔥" },
+            { question: "محلول يحتوي على كمية مذاب أكبر من الكمية اللازمة للإشباع يسمى:", options: ["فوق مشبع", "مشبع", "غير مشبع", "مخفف"], answer: 0, feedback: "المحلول فوق المشبع هو حالة خاصة يحمل فيها المحلول كمية زائدة.", icon: "📈" },
+            { question: "إذا أضفت 205 جم سكر في 100 مل ماء، فذاب 204 جم وترسب 1 جم في القاع، فالمحلول:", options: ["غير مشبع", "فوق مشبع", "مشبع", "نقي"], answer: 2, feedback: "ظهور الراسب يعني أن المحلول أخذ كفايته التامة (204 جم) وأصبح مشبعاً.", icon: "🧪" },
+            { question: "أي من المحاليل التالية يعتبر غير مستقر وتميل الكمية الزائدة فيه للترسب؟", options: ["المحلول المشبع", "المحلول غير المشبع", "المحلول فوق المشبع", "محلول الملح"], answer: 2, feedback: "المحلول فوق المشبع غير مستقر، وبمجرد التبريد أو الرج تترسب الزيادة.", icon: "⚠️" },
+            { question: "ما هي الحالة الفيزيائية للمذيب في محلول (سكر مذاب في ماء)؟", options: ["صلب", "غاز", "سائل", "بلازما"], answer: 2, feedback: "الماء هو المذيب وحالته سائلة.", icon: "🌊" },
+            { question: "المادة التي تتبقى في قاع الكوب ولا تذوب في المحلول المشبع تسمى:", options: ["مذيباً", "راسباً", "محلولاً", "غازاً"], answer: 1, feedback: "تسمى راسباً (أو مادة مترسبة) لأنها زائدة عن قدرة المحلول على الإذابة.", icon: "💎" }
+        ];
+
+        let studentName = "";
+        let studentClass = "";
+        let score = 0;
+        let currentSequence = [];
+        let currentSeqIndex = 0;
+        let wrongAnswersIndices = [];
+        let isReviewMode = false;
+
+        function startQuiz() {
+            studentName = document.getElementById('studentName').value.trim();
+            studentClass = document.getElementById('studentClass').value;
+            
+            if (!studentName || !studentClass) {
+                alert("الرجاء إدخال اسمك واختيار الصف قبل البدء!");
+                return;
+            }
+
+            currentSequence = Array.from({length: quizData.length}, (_, i) => i);
+            currentSeqIndex = 0;
+            score = 0;
+            wrongAnswersIndices = [];
+            isReviewMode = false;
+
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('quiz-screen').classList.add('active');
+            document.getElementById('quiz-screen').scrollTop = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            let actualQuestionIndex = currentSequence[currentSeqIndex];
+            let q = quizData[actualQuestionIndex];
+
+            document.getElementById('quiz-screen').style.background = gradients[currentSeqIndex % gradients.length];
+            
+            let currentNumber = currentSeqIndex + 1;
+            let totalNumber = currentSequence.length;
+            document.getElementById('progress-text').innerText = isReviewMode ? `مراجعة: السؤال ${currentNumber} من ${totalNumber}` : `السؤال ${currentNumber} من ${totalNumber}`;
+            let progressPercent = (currentNumber / totalNumber) * 100;
+            document.getElementById('progress-bar-fill').style.width = progressPercent + '%';
+
+            document.getElementById('q-icon').innerText = q.icon;
+            document.getElementById('q-text').innerText = q.question;
+            
+            let optionsHtml = '';
+            q.options.forEach((opt, index) => {
+                optionsHtml += `<button class="option-btn" onclick="checkAnswer(${index}, this)">${opt}</button>`;
+            });
+            document.getElementById('q-options').innerHTML = optionsHtml;
+
+            document.getElementById('q-feedback').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            let actualQuestionIndex = currentSequence[currentSeqIndex];
+            let q = quizData[actualQuestionIndex];
+            let buttons = document.querySelectorAll('.option-btn');
+            
+            buttons.forEach(btn => btn.disabled = true);
+
+            let isCorrect = (selectedIndex === q.answer);
+            let feedbackElement = document.getElementById('q-feedback');
+
+            if (isCorrect) {
+                btnElement.classList.add('correct');
+                feedbackElement.innerHTML = "✅ إجابة صحيحة!<br>" + q.feedback;
+                feedbackElement.style.backgroundColor = "rgba(46, 204, 113, 0.95)";
+                if (!isReviewMode) score++;
+            } else {
+                btnElement.classList.add('wrong');
+                buttons[q.answer].classList.add('correct');
+                feedbackElement.innerHTML = "❌ إجابة خاطئة.<br>" + q.feedback;
+                feedbackElement.style.backgroundColor = "rgba(231, 76, 60, 0.95)";
+                if (!isReviewMode) wrongAnswersIndices.push(actualQuestionIndex);
+            }
+
+            feedbackElement.style.display = 'block';
+            
+            let nextBtn = document.getElementById('next-btn');
+            if (currentSeqIndex === currentSequence.length - 1) {
+                nextBtn.innerText = isReviewMode ? "إنهاء المراجعة 🏁" : "عرض النتيجة النهائية 🏁";
+            } else {
+                nextBtn.innerText = "السؤال التالي ➔";
+            }
+            nextBtn.style.display = 'block';
+
+            setTimeout(() => {
+                feedbackElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
+        function handleNextAction() {
+            currentSeqIndex++;
+            if (currentSeqIndex < currentSequence.length) {
+                document.getElementById('quiz-screen').scrollTop = 0;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').classList.remove('active');
+            document.getElementById('result-screen').classList.add('active');
+
+            if (!isReviewMode) {
+                document.getElementById('final-score').innerText = `نتيجتك: ${score} من ${quizData.length}`;
+                
+                if (wrongAnswersIndices.length > 0) {
+                    document.getElementById('review-btn').style.display = 'inline-block';
+                }
+
+                sendDataToGoogle();
+            } else {
+                document.getElementById('result-msg').innerText = "تم الانتهاء من مراجعة أخطائك!";
+                document.getElementById('review-btn').style.display = 'none';
+                document.getElementById('loading-msg').style.display = 'none';
+            }
+        }
+
+        function sendDataToGoogle() {
+            document.getElementById('loading-msg').innerText = "جاري إرسال النتيجة للأستاذ... ⏳";
+            
+            const formData = new FormData();
+            formData.append('name', studentName);
+            formData.append('studentClass', studentClass);
+            formData.append('score', score);
+            // إضافة المتغير الجديد لتحديد الورقة الثانية
+            formData.append('sheetName', TARGET_SHEET_NAME); 
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                document.getElementById('loading-msg').innerText = "✅ تم تسجيل النتيجة عند الأستاذ بنجاح!";
+                document.getElementById('loading-msg').style.color = "#2ecc71";
+            })
+            .catch(error => {
+                document.getElementById('loading-msg').innerText = "⚠️ حدث خطأ أثناء إرسال النتيجة.";
+                document.getElementById('loading-msg').style.color = "#e74c3c";
+                console.error('Error!', error.message);
+            });
+        }
+
+        function startReviewMode() {
+            isReviewMode = true;
+            currentSequence = [...wrongAnswersIndices];
+            currentSeqIndex = 0;
+            
+            document.getElementById('result-screen').classList.remove('active');
+            document.getElementById('quiz-screen').classList.add('active');
+            document.getElementById('quiz-screen').scrollTop = 0;
+            
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>
